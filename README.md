@@ -1,108 +1,95 @@
-# Spacemit #
+Spacemit
+1. Introduction
 
-## 1. 简介
+ESOS (Energy Service OS) is an energy efficiency management system developed by Spacemit Technology Co., Ltd. It provides auxiliary management functions for the system and features the following hardware specifications:
+Hardware	Description
+Chip Model	K1
+CPU	N308
+Frequency	245MHz
+DDR	Shared AP DDR
+SRAM	256KB
+2. Compilation Instructions
+Environment	Description
+Host OS	Linux
+Compiler	riscv-nuclei-elf-gcc version 10.2.0
+Build Tool	scons
+1) Download Source Code
 
-ESOS(Energy Service OS) 是由进迭时空科技有限公司开发的能效管理系统，为系统提供辅助管理功能
-包括如下硬件特性：
+The source code is released as part of the SDK.
+2) Project Configuration and Environment Setup
+Bash
 
-| 硬件 | 描述 |
-| -- | -- |
-|芯片型号| k1 |
-|CPU| N308 |
-|主频| 245Mhz |
-|DDR | 共享AP DDR |
-|SRAM | 256KB |
+cd esos
+./build.sh config
 
-## 2. 编译说明
+INFO: prepare to config sdk ...
+All valid soc chips:
+        0: n308
+Please select a chip: 0
+All valid boards:
+        0: k1-x
+Please select a board: 0
 
-| 环境 | 说明 |
-| --- | --- |
-|PC操作系统|Linux|
-|编译器|riscv-nuclei-elf-gcc version 10.2.0|
-|构建工具|scons|
+3) Compile
+Bash
 
-1) 下载源码
+./build.sh
 
-```
-随SDK一起发布
-```
-2) 配置工程并准备env
-```
-    cd esos
-    ./build.sh config
+4) Clean Build Artifacts
+Bash
 
-    INFO: prepare to config sdk ...
-    All valid soc chips:
-            0: n308
-    Please select a chip:0
-    All valid boards:
-            0: k1-x
-    Please select a board:0
+./build.sh clean
 
-```
-3) 编译
-```
-    ./build.sh
-```
-4) 清除编译临时文件
-```
-    ./build.sh clean
-```
-5) 配置
-```
-    cd bsp/spacemit/
-    scons --meuconfig
-```
-如果编译正确无误，会产生rtthread.bin、rtthread-n308.elf文件。其中rtthread-n308.elf需要copy到主系统的ramfs中供linux加载并启动运行。
+5) Advanced Configuration
+Bash
 
-## 3. elf文件存放路径
-**小核系统的可执行文件(elf)是存放在ramfs中的，编译整个SDK前需要将elf文件存放到正确位置**
+cd bsp/spacemit/
+scons --menuconfig
 
-1)bianbu-desktop系统存放位置
-```
-1) 首先启动bianbu-desktop, 将rtthread-n308.elf放到/lib/firmware/esos.elf
-2) 执行update-initramfs -u
-3) 重启系统
-```
+If the compilation is successful, rtthread.bin and rtthread-n308.elf files will be generated. The rtthread-n308.elf file needs to be copied to the main system's ramfs so that Linux can load and execute it.
+3. ELF File Storage Paths
 
-2)bianbu-linux系统存放位置
-```
+The executable file (.elf) for the little-core system is stored in the ramfs. Before compiling the entire SDK, you must place the ELF file in the correct location.
+1) Path for bianbu-desktop system
+
+    Start bianbu-desktop and place rtthread-n308.elf into /lib/firmware/esos.elf.
+
+    Run update-initramfs -u.
+
+    Reboot the system.
+
+2) Path for bianbu-linux system
+Plaintext
+
 buildroot-ext/board/spacemit/k1/target_overlay/lib/firmware/esos.elf
-```
 
-### 3.1 运行结果
+3.1 Running Results
 
-如果编译 & 烧写无误，会在RUART0上看到RT-Thread的启动logo信息：
+If compilation and flashing are successful, you will see the RT-Thread startup logo on RUART0:
+Plaintext
 
-```
-\ | /
+ \ | /
 - RT -     Thread Operating System
  / | \     4.0.4 build Oct 22 2025 14:57:47
  2006 - 2021 Copyright by rt-thread team
 
-```
+4. Driver Support Status and Roadmap
+Driver	Support Status	Remarks
+UART	Supported	UART0-1
+GPIO	Supported	/
+Pinctrl	Supported	/
+CLK	Supported	/
+I2C	Supported	I2C0
+SPI	Supported	SPI0
+Mailbox	Supported	/
+Remoteproc	Supported	/
+PWM	Supported	PWM0~9
+DMA	Supported	/
+MMU	Not Supported	/
+ADMA	Partial	Interrupt delivery only
+CAN	Partial	Interrupt delivery only
+IR	Partial	Interrupt delivery only
+5. Contact Information
 
-## 4. 驱动支持情况及计划
-
-| 驱动 | 支持情况  |  备注  |
-| ------ | :----:  | :------:  |
-| uart | 支持 | uart0-1 |
-| gpio | 支持 | / |
-| pinctrl | 支持 | / |
-| clk | 支持 | / |
-| i2c | 支持 | i2c0 |
-| spi | 支持 | spi0 |
-| mailbox | 支持 | / |
-| remoteproc | 支持 | / |
-| pwm | 支持 | pwm0~9 |
-| dma | 支持 | / |
-| mmu | 不支持 | / |
-| adma | 半支持 | 仅支持中断投送功能 |
-| can | 半支持 | 仅支持中断投送功能 |
-| ir | 半支持 | 仅支持中断投送功能 |
-
-
-## 5. 联系人信息
-
-维护人:
-[zhuxianbin][4] < [xianbin.zhu@spacemit.com][5] >
+Maintainer:
+[Zhuxianbin] < xianbin.zhu@spacemit.com >
