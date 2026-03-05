@@ -45,7 +45,7 @@ Please select a board: 0
 ```
 ### 2.3 Compile
 ```bash 
-./build.sh clean
+./build.sh 
 ``` 
 ### 2.4 Clean Build Artifacts
 ```bash
